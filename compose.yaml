@@ -1,0 +1,55 @@
+services:
+  postgres_dev:
+    image: postgres:18
+    container_name: dm-pg-dev
+    restart: unless-stopped
+    networks:
+      - dev_network
+    ports:
+      - "${POSTGRES_PORT_DEV}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER_DEV}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_DEV}
+      POSTGRES_DB: ${POSTGRES_DB_DEV}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    volumes:
+      - pgdata_dev:/var/lib/postgresql
+
+  postgres_prod:
+    image: postgres:18
+    container_name: dm-pg-prod
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT_PROD}:5432"
+    networks:
+      - prod_network
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER_PROD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_PROD}
+      POSTGRES_DB: ${POSTGRES_DB_PROD}
+      READER_USER: ${READER_USER_PROD}
+      READER_PASSWORD: ${READER_PASSWORD_PROD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    volumes:
+      - pgdata_prod:/var/lib/postgresql
+      - ./docker-postgres-init:/docker-entrypoint-initdb.d:ro
+
+volumes:
+  pgdata_dev:
+  pgdata_prod:
+
+networks:
+  dev_network:
+    driver: bridge
+  prod_network:
+    driver: bridge
