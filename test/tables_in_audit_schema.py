@@ -27,15 +27,16 @@ engine = create_engine(url)
 query = """
 SELECT table_schema, table_name, table_type
 FROM information_schema.tables
-WHERE table_schema NOT IN ('pg_catalog', 'information_schema')
+WHERE table_schema  IN ('audit')
 ORDER BY table_schema, table_name
 """
-print(pd.read_sql(text(query), engine))
-
-query = """
-SELECT * from raw."address"
-"""
-print(pd.read_sql(text(query), engine))
+result = pd.read_sql(text(query), engine)
+print(result)
+for table in result.table_name:
+    query = f"""
+    SELECT * from audit.{table}
+    """
+    print(pd.read_sql(text(query), engine))
 
 
 engine.dispose()
