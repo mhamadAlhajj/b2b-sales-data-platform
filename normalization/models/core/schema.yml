@@ -1,0 +1,270 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    tables:
+    - name: address
+      description: "address table"
+      columns:
+        - name: AddressID
+          description: The primary key for this table
+          tests:
+            - unique: {config: {severity: warn}}
+            - not_null: {config: {severity: warn}}
+
+    - name: campaign_log
+      description: campaign information
+      columns:
+        - name: campaignName
+          description: the campaign Name
+        - name: Channel
+          description: the channel of the campaign
+        - name: StartDate
+          description: campaign start date
+        - name: EndDate
+          description: campaign end date
+        - name: Budget
+          description: budget of campaign
+        - name: Date 
+          description: days between start date and date of the campaign 
+        - name: Impressions
+        - name: Clicks
+        - name: Spend
+
+    - name: campaign_skus
+      description: "Products promoted by each campaign. Several SKUs are stored in one cell (not in 1NF)."
+      columns:
+        - name: campaign_name
+          description: "Campaign name."
+          tests:
+            - not_null: {config: {severity: warn}}
+        - name: promoted_skus
+          description: "Comma-separated list of product codes."
+
+    - name: cities
+      description: "Cities and the region each belongs to."
+      columns:
+        - name: city_name
+          description: "City name."
+          tests:
+            - unique:   {config: {severity: warn}}
+            - not_null: {config: {severity: warn}}
+        - name: region_name
+          description: "Region of the city."
+          tests:
+            - relationships:
+                to: source('raw', 'regions')
+                field: region_name
+                config: {severity: warn}
+
+    - name: cust_master
+      description: "One row per customer, from the ERP."
+      columns:
+        - name: customer_id
+          description: "Customer identifier. Natural key."
+          tests:
+            - unique:   {config: {severity: warn}}
+            - not_null: {config: {severity: warn}}
+        - name: segment
+          description: "Customer size class."
+          tests:
+            - accepted_values:
+                values: ['SMB', 'Mid-Market', 'Enterprise']
+                config: {severity: warn}
+        - name: payment_terms
+          description: "Agreed payment terms."
+          tests:
+            - accepted_values:
+                values: ['Net 15', 'Net 30', 'Net 60', 'Prepaid']
+                config: {severity: warn}
+
+    - name: customer_contacts
+      description: "Contacts of each customer. One customer has several contacts."
+      columns:
+        - name: customer_id
+          description: "Customer the contact belongs to."
+          tests:
+            - relationships:
+                to: source('raw', 'cust_master')
+                field: customer_id
+                config: {severity: warn}
+        - name: is_primary
+          description: "True for the main contact of the customer."
+
+    - name: customer_preferences
+      description: "Languages and ship modes of each customer, stored as two independent lists (4NF issue)."
+      columns:
+        - name: customer_id
+          description: "Customer identifier."
+          tests:
+            - relationships:
+                to: source('raw', 'cust_master')
+                field: customer_id
+                config: {severity: warn}
+
+    - name: dim_order
+      description: "Not yet analyzed."
+
+    - name: exchange_rates
+      description: "Rate of each currency on a date. Assumed: one unit of currency in USD."
+      columns:
+        - name: currency
+          description: "Currency code."
+          tests:
+            - not_null: {config: {severity: warn}}
+        - name: rate
+          description: "Exchange rate."
+          tests:
+            - not_null: {config: {severity: warn}}
+
+    - name: inventory
+      description: "Stock per product. One column per month (wide format, not in 1NF)."
+      columns:
+        - name: product_name
+          description: "Product name."
+          tests:
+            - unique:   {config: {severity: warn}}
+            - not_null: {config: {severity: warn}}
+
+    - name: invoice_lines
+      description: "One row per product line of an invoice."
+      columns:
+        - name: invoice_line_id
+          description: "Invoice line identifier."
+          tests:
+            - unique:   {config: {severity: warn}}
+            - not_null: {config: {severity: warn}}
+        - name: invoice_id
+          description: "Parent invoice."
+          tests:
+            - relationships:
+                to: source('raw', 'invoices')
+                field: invoice_id
+                config: {severity: warn}
+
+    - name: invoices
+      description: "One row per invoice."
+      columns:
+        - name: invoice_id
+          description: "Invoice identifier."
+          tests:
+            - unique:   {config: {severity: warn}}
+            - not_null: {config: {severity: warn}}
+        - name: order_id
+          description: "Order that was invoiced."
+          tests:
+            - not_null: {config: {severity: warn}}
+
+    - name: order_line_items
+      description: "One row per product line of an order."
+      columns:
+        - name: line_id
+          description: "Order line identifier."
+          tests:
+            - unique:   {config: {severity: warn}}
+            - not_null: {config: {severity: warn}}
+
+    - name: orders_2025
+      description: "Orders placed in 2025. Same entity as orders_2026."
+      columns:
+        - name: order_id
+          description: "Order identifier."
+          tests:
+            - unique:   {config: {severity: warn}}
+            - not_null: {config: {severity: warn}}
+
+    - name: orders_2026
+      description: "Orders placed in 2026. Same entity as orders_2025."
+      columns:
+        - name: order_id
+          description: "Order identifier."
+          tests:
+            - unique:   {config: {severity: warn}}
+            - not_null: {config: {severity: warn}}
+
+    - name: payments
+      description: "One row per payment. An invoice can have several payments."
+      columns:
+        - name: payment_id
+          description: "Payment identifier."
+          tests:
+            - unique:   {config: {severity: warn}}
+            - not_null: {config: {severity: warn}}
+        - name: invoice_id
+          description: "Invoice that was paid."
+          tests:
+            - relationships:
+                to: source('raw', 'invoices')
+                field: invoice_id
+                config: {severity: warn}
+
+    - name: products
+      description: "Product catalog."
+      columns:
+        - name: product_code
+          description: "Product identifier. Natural key."
+          tests:
+            - unique:   {config: {severity: warn}}
+            - not_null: {config: {severity: warn}}
+
+    - name: regions
+      description: "List of sales regions."
+      columns:
+        - name: region_name
+          description: "Region name."
+          tests:
+            - unique:   {config: {severity: warn}}
+            - not_null: {config: {severity: warn}}
+
+    - name: sales_targets
+      description: "Not yet analyzed."
+
+    - name: security
+      description: "Not yet analyzed."
+
+    - name: sheet1
+      description: "Not yet analyzed."
+
+    - name: shipments
+      description: "One row per shipment. An order can have several."
+      columns:
+        - name: shipment_id
+          description: "Shipment identifier."
+          tests:
+            - unique:   {config: {severity: warn}}
+            - not_null: {config: {severity: warn}}
+
+    - name: subcategories
+      description: "Category and subcategory in one cell, like electronics|phones."
+
+    - name: supply_routes
+      description: "Which supplier delivers which product to which region (three-way fact)."
+      columns:
+        - name: supplier
+          description: "Supplier name."
+          tests:
+            - not_null: {config: {severity: warn}}
+        - name: product_code
+          description: "Product delivered."
+          tests:
+            - relationships:
+                to: source('raw', 'products')
+                field: product_code
+                config: {severity: warn}
+        - name: region_name
+          description: "Region served."
+          tests:
+            - relationships:
+                to: source('raw', 'regions')
+                field: region_name
+                config: {severity: warn}
+
+    - name: user_details
+      description: "Credit limit and phone of each customer (user_id is the customer id)."
+      columns:
+        - name: user_id
+          description: "Same value as cust_master.customer_id."
+          tests:
+            - unique:   {config: {severity: warn}}
+            - not_null: {config: {severity: warn}}

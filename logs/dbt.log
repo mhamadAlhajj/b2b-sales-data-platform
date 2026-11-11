@@ -1,0 +1,29 @@
+[0m14:11:48.627451 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000293EEFDB6E0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000293F1E43D10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000293F1E40800>]}
+
+
+============================== 14:11:48.634483 | 28c375a8-32fb-4cf1-8238-0f7b15206bbd ==============================
+[0m14:11:48.634483 [info ] [MainThread]: Running with dbt=1.11.12
+[0m14:11:48.635635 [debug] [MainThread]: running dbt with arguments {'version_check': 'True', 'no_print': 'None', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'printer_width': '80', 'write_json': 'True', 'empty': 'None', 'log_cache_events': 'False', 'introspect': 'True', 'cache_selected_only': 'False', 'fail_fast': 'False', 'debug': 'False', 'log_format': 'default', 'partial_parse': 'True', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'profiles_dir': 'C:\\Users\\DELL\\.dbt', 'use_colors': 'True', 'indirect_selection': 'eager', 'invocation_command': 'dbt init normalization', 'use_experimental_parser': 'False', 'log_path': 'logs'}
+[0m14:11:48.733278 [debug] [MainThread]: Starter project path: C:\Users\DELL\AppData\Local\Programs\Python\Python312\Lib\site-packages\dbt\include\starter_project
+[0m14:11:48.752278 [info ] [MainThread]: 
+Your new dbt project "normalization" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m14:11:48.753299 [info ] [MainThread]: Setting up your profile.
+[0m14:15:24.840976 [info ] [MainThread]: Profile normalization written to C:\Users\DELL\.dbt\profiles.yml using target's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
+[0m14:15:24.844553 [debug] [MainThread]: Command `dbt init` succeeded at 14:15:24.843932 after 216.39 seconds
+[0m14:15:24.845935 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000293F2684590>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000293F1239670>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000293F1E43F80>]}
+[0m14:15:24.846965 [debug] [MainThread]: Flushing usage events
+[0m14:15:25.815812 [debug] [MainThread]: An error was encountered while trying to flush usage events

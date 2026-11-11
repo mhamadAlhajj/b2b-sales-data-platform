@@ -2,3 +2,5 @@ notebook files/
 *.env
 project_log.md
 scripts/python/delete.py
+myenv
+scripts/python/load_sqlserver.py
