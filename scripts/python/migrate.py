@@ -1,22 +1,10 @@
-from dotenv import load_dotenv
-import os
 import hashlib
-from sqlalchemy import create_engine, text
-from sqlalchemy.engine import URL
+from sqlalchemy import  text
 from pathlib import Path
+from credentials import get_connection
 
 
-load_dotenv()
-
-url = URL.create(
-    "postgresql+psycopg2",
-    username=os.environ["POSTGRES_USER_DEV"],
-    password=os.environ["POSTGRES_PASSWORD_DEV"],
-    host="localhost",
-    port=int(os.environ["POSTGRES_PORT_DEV"]),
-    database=os.environ["POSTGRES_DB_DEV"],
-)
-engine = create_engine(url)
+engine = get_connection()
 
 MIGRATIONS_DIR = Path("./scripts/SQL/migrations")
 files = sorted(MIGRATIONS_DIR.glob("V*.sql"))
