@@ -32,7 +32,6 @@ for sheet_name, df in excel_sheets.items():
     rows_loaded = None
     status = "success"
     error_message = None
-
     try:
         with engine.begin() as conn:
             df = df.assign(

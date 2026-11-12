@@ -1,0 +1,49 @@
+version: 2
+models:
+  - name: address
+    columns:
+      - name: address_id
+        # TO CHECK THAT ALL IDs ARE UNIQUE AND NOT NULLS
+        tests:
+          - unique
+          - not_null
+  - name: campaign
+    columns:
+      - name: campaign_id
+      # TO CHECK THAT ALL IDs ARE UNIQUE AND NOT NULLS
+        tests: 
+          - unique
+          - not_null
+  - name: daily_campaign_information
+    columns:
+      - name: campaign_id
+        # TO CHECK THAT ALL CAMPAIGN ID ARE EXIST IN CAMPAIGN MODEL
+        tests:
+          - relationships:
+              to: ref('campaign')
+              field: campaign_id
+
+  - name: campaign_skus
+    columns:
+      - name: campaign_id
+        tests:
+          - relationships:
+              to: ref('campaign')
+              field: campaign_id
+  - name: city
+    columns:
+      - name: city_id
+        tests:
+          - unique
+          - not_null
+  - name: customer
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique
+      - name: address_id
+        tests:
+          - relationships:
+              to: ref('address')
+              field: address_id
