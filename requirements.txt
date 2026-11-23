@@ -2,6 +2,6 @@ psycopg2-binary
 python-dotenv
 pandas
 sqlalchemy
-dbt-postgres
-dbt-core
+dbt-core>=1.9,<2
+dbt-postgres>=1.9,<2
 openpyxl

@@ -3,4 +3,5 @@ notebook files/
 project_log.md
 scripts/python/delete.py
 myenv
+.venv
 scripts/python/load_sqlserver.py

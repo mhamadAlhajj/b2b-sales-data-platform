@@ -47,3 +47,54 @@ models:
           - relationships:
               to: ref('address')
               field: address_id
+  - name: customer_phone
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('customer')
+              field: customer_id
+  - name: customer_credit
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('customer')
+              field: customer_id
+  - name: customer_language
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('customer')
+              field: customer_id
+  - name: customer_ship_mode
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('customer')
+              field: customer_id
+  - name: customer_contacts
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('customer')
+              field: customer_id
+  - name: invoice
+    columns:
+      - name: invoice_id
+        tests:
+          - not_null
+          - unique
+      - name: order_id
+        tests:
+          - relationships:
+              to: ref('order')
+              field: order_id
